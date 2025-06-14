@@ -12,7 +12,7 @@ projectRoute.get("/", async (c) => {
       acc[item.project_type] = [];
     }
 
-    acc[item.project_type].push.item;
+    acc[item.project_type].push(item);
     return acc;
   }, {});
 
