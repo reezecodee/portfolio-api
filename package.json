@@ -12,5 +12,8 @@
   "dependencies": {
     "@supabase/supabase-js": "^2.49.1",
     "hono": "^4.7.4"
+  },
+  "scripts": {
+    "start": "bun src/server.ts"
   }
 }

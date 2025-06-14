@@ -1,0 +1,8 @@
+{
+  "build": {
+    "command": "bun install"
+  },
+  "start": {
+    "command": "bun src/server.ts"
+  }
+}
