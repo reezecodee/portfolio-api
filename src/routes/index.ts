@@ -6,7 +6,18 @@ import blogRoute from "./blogs";
 import cryptoRoute from "./cryptos";
 
 const app: Hono = new Hono();
-app.use("*", cors());
+app.use(
+  "*",
+  cors({
+    origin: (origin) => {
+      const allowedOrigins = [
+        "http://localhost:5173", // dev
+        "https://reeze.vercel.app", // production
+      ];
+      return allowedOrigins.includes(origin ?? "") ? origin : "";
+    },
+  })
+);
 
 app.route("/skills", skillRoute);
 app.route("/cryptos", cryptoRoute);
