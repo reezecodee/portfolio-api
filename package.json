@@ -14,6 +14,9 @@
     "hono": "^4.7.4"
   },
   "scripts": {
-    "start": "bun src/server.ts"
+    "dev": "bun --watch src/index.ts",
+    "start": "bun src/index.ts",
+    "db:push": "bunx supabase db push",
+    "db:new": "bunx supabase migration new"
   }
 }
