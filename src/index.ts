@@ -19,9 +19,17 @@ app.use("*", prettyJSON());
 app.use(
   "*",
   cors({
-    origin: "https://reeze.up.railway.app",
+    origin: (origin) => {
+      const allowed = ["https://reeze.up.railway.app", "http://localhost:5173"];
+
+      if (!origin || allowed.includes(origin)) {
+        return origin;
+      }
+
+      return null;
+    },
     allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowHeaders: ["Content-Type", "Authorization"], // izinkan header token
+    allowHeaders: ["Content-Type", "Authorization"],
     maxAge: 600,
   })
 );
