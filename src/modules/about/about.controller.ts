@@ -9,7 +9,7 @@ export const getAboutData = async (c: Context) => {
       return c.json(
         {
           success: false,
-          message: "Data profile belum tersedia.",
+          message: "Data profile belum tersedia",
           error: error.message,
         },
         404

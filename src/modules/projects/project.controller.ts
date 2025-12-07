@@ -9,10 +9,10 @@ export const getList = async (c: Context) => {
       return c.json(
         {
           success: false,
-          message: "Gagal memuat list projects",
+          message: "Daftar project belum tersedia",
           error: error.message,
         },
-        500
+        404
       );
     }
 

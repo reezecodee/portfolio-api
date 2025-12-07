@@ -14,7 +14,7 @@ export const getMessages = async () => {
     `) 
     .eq('is_visible', true)
     .order('created_at', { ascending: false })
-    .limit(50); 
+    .limit(15); 
 };
 
 export const createMessage = async (userId: string, message: string) => {

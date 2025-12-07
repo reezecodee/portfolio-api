@@ -9,10 +9,10 @@ export const getSkills = async (c: Context) => {
       return c.json(
         {
           success: false,
-          message: "Gagal memuat data skills",
+          message: "Daftar kemampuan belum tersedia",
           error: error.message,
         },
-        500
+        404
       );
     }
 

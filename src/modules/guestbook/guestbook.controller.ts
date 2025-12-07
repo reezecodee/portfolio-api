@@ -5,11 +5,23 @@ export const getMessages = async (c: Context) => {
   try {
     const { data, error } = await service.getMessages();
 
-    if (error) return c.json({ error: error.message }, 500);
+    if (error) {
+      return c.json(
+        {
+          success: false,
+          message: "Daftar pesan belum tersedia",
+          error: error.message,
+        },
+        404
+      );
+    }
 
-    return c.json({ success: true, data });
+    return c.json({
+      success: true,
+      data: data,
+    });
   } catch (e) {
-    return c.json({ error: "Internal Server Error" }, 500);
+    return c.json({ success: false, message: "Internal Server Error" }, 500);
   }
 };
 

@@ -11,17 +11,18 @@ import guestbookRoute from "./modules/guestbook/guestbook.routes";
 import projectRoute from "./modules/projects/project.routes";
 import skillRoute from "./modules/skills/skill.routes";
 
-const app = new Hono();
+export const app = new Hono();
 
 app.use("*", logger());
-
 app.use("*", prettyJSON());
 
 app.use(
   "*",
   cors({
     origin: "*", // 'https://reeze.up.railway.app'
-    allowMethods: ["GET", "POST", "OPTIONS"],
+    allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowHeaders: ["Content-Type", "Authorization"], // izinkan header token
+    maxAge: 600,
   })
 );
 
@@ -33,13 +34,13 @@ app.get("/", (c) => {
   });
 });
 
-app.route("/api/about", aboutRoute);
-app.route("/api/blogs", blogRoute);
-app.route("/api/educations", educationRoute);
-app.route("/api/experiences", experienceRoute);
-app.route("/api/guestbook", guestbookRoute);
-app.route("/api/projects", projectRoute);
-app.route("/api/skills", skillRoute);
+app.route("/api/v1/about", aboutRoute);
+app.route("/api/v1/blogs", blogRoute);
+app.route("/api/v1/educations", educationRoute);
+app.route("/api/v1/experiences", experienceRoute);
+app.route("/api/v1/guestbook", guestbookRoute);
+app.route("/api/v1/projects", projectRoute);
+app.route("/api/v1/skills", skillRoute);
 
 const port = process.env.PORT || 3000;
 console.log(`Server is running on port ${port}`);

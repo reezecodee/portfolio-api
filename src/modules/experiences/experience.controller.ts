@@ -9,10 +9,10 @@ export const getExperiences = async (c: Context) => {
       return c.json(
         {
           success: false,
-          message: "Gagal memuat data experiences",
+          message: "Daftar pengalaman belum tersedia",
           error: error.message,
         },
-        500
+        404
       );
     }
 
