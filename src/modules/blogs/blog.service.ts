@@ -1,13 +1,26 @@
 import { supabase } from "../../config/supabase";
+import { formatDate } from "../../utils/format-date";
 
 export const getBlogList = async () => {
-  return await supabase
+  const { data, error } = await supabase
     .from("blogs")
     .select(
       "id, title, slug, summary, cover_image, language, tags, published_at, views"
     )
     .eq("is_published", true)
     .order("published_at", { ascending: false });
+
+  if (error) return { data: null, error };
+
+  const formattedDate = data.map((item) => ({
+    ...item,
+    published_at: formatDate(item.published_at, "numeric"),
+  }));
+
+  return {
+    data: formattedDate,
+    error: null,
+  };
 };
 
 export const getBlogBySlug = async (slug: string) => {
