@@ -19,7 +19,7 @@ app.use("*", prettyJSON());
 app.use(
   "*",
   cors({
-    origin: "*", // 'https://reeze.up.railway.app'
+    origin: "https://reeze.up.railway.app",
     allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowHeaders: ["Content-Type", "Authorization"], // izinkan header token
     maxAge: 600,

@@ -17,6 +17,7 @@
     "dev": "bun --watch src/index.ts",
     "start": "bun src/index.ts",
     "db:push": "bunx supabase db push",
-    "db:new": "bunx supabase migration new"
+    "db:new": "bunx supabase migration new",
+    "supabase:link": "bunx supabase link --project-ref"
   }
 }
