@@ -11,7 +11,7 @@ const CATEGORY_ORDER = [
 export const getAllProjects = async () => {
   const { data, error } = await supabase
     .from("projects")
-    .select("id, title, slug, summary, image_url, category, tools")
+    .select("id, title, slug, summary, content, image_url, category, tools")
     .order("display_order", { ascending: true })
     .order("created_at", { ascending: false });
 
