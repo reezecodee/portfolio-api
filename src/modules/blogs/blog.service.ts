@@ -24,11 +24,20 @@ export const getBlogList = async () => {
 };
 
 export const getBlogBySlug = async (slug: string) => {
-  const result = await supabase
+  const { data, error } = await supabase
     .from("blogs")
     .select("*")
     .eq("slug", slug)
     .eq("is_published", true)
     .single();
-  return result;
+
+  if (error) return { data: null, error };
+
+  const formattedData = {
+    ...data,
+    published_at: formatDate(data.published_at, "numeric"),
+    created_at: formatDate(data.created_at, "numeric"),
+  };
+
+  return { data: formattedData, error: null };
 };

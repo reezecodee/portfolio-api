@@ -1,4 +1,5 @@
 import { supabase } from "../../config/supabase";
+import { formatDate } from "../../utils/format-date";
 
 const CATEGORY_ORDER = [
   "Web Development",
@@ -44,5 +45,18 @@ export const getAllProjects = async () => {
 };
 
 export const getProjectBySlug = async (slug: string) => {
-  return await supabase.from("projects").select("*").eq("slug", slug).single();
+  const { data, error } = await supabase
+    .from("projects")
+    .select("*")
+    .eq("slug", slug)
+    .single();
+
+  if (error) return { data: null, error };
+
+  const formattedData = {
+    ...data,
+    created_at: formatDate(data.created_at, "numeric"),
+  };
+
+  return { data: formattedData, error: null };
 };
