@@ -3,24 +3,31 @@ import * as service from "./project.service";
 
 export const getList = async (c: Context) => {
   try {
-    const { data, error } = await service.getAllProjects();
+    const page = parseInt(c.req.query("page") || "1");
+    const limit = parseInt(c.req.query("limit") || "6");
+    const category = c.req.query("category") || "";
+
+    const { data, total, error } = await service.getProjects(
+      page,
+      limit,
+      category
+    );
 
     if (error) {
-      return c.json(
-        {
-          success: false,
-          message: "Daftar project belum tersedia",
-          error: error.message,
-        },
-        404
-      );
+      return c.json({ success: false, message: error.message }, 500);
     }
 
     return c.json({
       success: true,
       data: data,
+      pagination: {
+        current_page: page,
+        per_page: limit,
+        total_data: total,
+        total_pages: Math.ceil((total || 0) / limit),
+      },
     });
-  } catch (e) {
+  } catch (e: any) {
     return c.json({ success: false, message: "Internal Server Error" }, 500);
   }
 };

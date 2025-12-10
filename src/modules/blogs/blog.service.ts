@@ -1,24 +1,30 @@
 import { supabase } from "../../config/supabase";
 import { formatDate } from "../../utils/format-date";
 
-export const getBlogList = async () => {
-  const { data, error } = await supabase
+export const getBlogList = async (page = 1, limit = 6) => {
+  const from = (page - 1) * limit;
+  const to = from + limit - 1;
+
+  const { data, count, error } = await supabase
     .from("blogs")
     .select(
-      "id, title, slug, summary, cover_image, language, tags, published_at, views"
+      "id, title, slug, summary, cover_image, language, tags, published_at, views",
+      { count: "exact" }
     )
     .eq("is_published", true)
-    .order("published_at", { ascending: false });
+    .order("published_at", { ascending: false })
+    .range(from, to);
 
-  if (error) return { data: null, error };
+  if (error) return { data: null, total: 0, error };
 
-  const formattedDate = data.map((item) => ({
+  const formattedData = data.map((item) => ({
     ...item,
     published_at: formatDate(item.published_at, "numeric"),
   }));
 
   return {
-    data: formattedDate,
+    data: formattedData,
+    total: count, 
     error: null,
   };
 };

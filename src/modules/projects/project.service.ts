@@ -5,7 +5,7 @@ const CATEGORY_ORDER = [
   "Web Development",
   "Mobile Development",
   "Machine Learning",
-  "Backend API",
+  "Backend",
   "Tools",
 ];
 
@@ -14,7 +14,8 @@ export const getAllProjects = async () => {
     .from("projects")
     .select("id, title, slug, summary, content, image_url, category, tools")
     .order("display_order", { ascending: true })
-    .order("created_at", { ascending: false });
+    .order("created_at", { ascending: false })
+    .limit(6);
 
   if (error) return { data: null, error };
 
@@ -42,6 +43,31 @@ export const getAllProjects = async () => {
   });
 
   return { data: sortedResult, error: null };
+};
+
+export const getProjects = async (page = 1, limit = 6, category = "") => {
+  const from = (page - 1) * limit;
+  const to = from + limit - 1;
+
+  let query = supabase
+    .from("projects")
+    .select("*", { count: "exact" }) 
+    .eq("is_published", true)
+    .order("created_at", { ascending: false });
+
+  if (category && category !== "All") {
+    query = query.eq("category", category);
+  }
+
+  const { data, count, error } = await query.range(from, to);
+
+  if (error) return { data: null, total: 0, error };
+
+  return {
+    data: data,
+    total: count,
+    error: null,
+  };
 };
 
 export const getProjectBySlug = async (slug: string) => {

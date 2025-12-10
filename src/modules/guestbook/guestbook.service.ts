@@ -1,8 +1,11 @@
 import { supabase } from "../../config/supabase";
 import { formatDate } from "../../utils/format-date";
 
-export const getMessages = async () => {
-  const { data, error } = await supabase
+export const getMessages = async (page = 1, limit = 10) => {
+  const from = (page - 1) * limit;
+  const to = from + limit - 1;
+
+  const { data, count, error } = await supabase
     .from("guestbook")
     .select(
       `
@@ -13,13 +16,14 @@ export const getMessages = async () => {
         name,
         avatar_url
       )
-    `
+    `,
+      { count: "exact" }
     )
     .eq("is_visible", true)
     .order("created_at", { ascending: false })
-    .limit(15);
+    .range(from, to);
 
-  if (error) return { data: null, error };
+  if (error) return { data: null, total: 0, error };
 
   const formattedMessage = data.map((item) => {
     const visitor = Array.isArray(item.visitors)
@@ -32,7 +36,7 @@ export const getMessages = async () => {
     return {
       ...item,
       visitors: {
-        ...safeVisitor, 
+        ...safeVisitor,
         initial: name.charAt(0).toUpperCase(),
       },
       created_at: formatDate(item.created_at, "numeric"),
@@ -41,6 +45,7 @@ export const getMessages = async () => {
 
   return {
     data: formattedMessage,
+    total: count,
     error: null,
   };
 };

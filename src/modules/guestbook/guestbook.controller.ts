@@ -3,7 +3,9 @@ import * as service from "./guestbook.service";
 
 export const getMessages = async (c: Context) => {
   try {
-    const { data, error } = await service.getMessages();
+    const page = parseInt(c.req.query("page") || "1");
+    const limit = parseInt(c.req.query("limit") || "10");
+    const { data, total, error } = await service.getMessages(page, limit);
 
     if (error) {
       return c.json(
@@ -12,15 +14,22 @@ export const getMessages = async (c: Context) => {
           message: "Daftar pesan belum tersedia",
           error: error.message,
         },
-        404
+        500 
       );
     }
-
+    
     return c.json({
       success: true,
       data: data,
+      pagination: {
+        current_page: page,
+        per_page: limit,
+        total_data: total,
+        total_pages: Math.ceil((total || 0) / limit), 
+      },
     });
-  } catch (e) {
+  } catch (e: any) {
+    console.error(e);
     return c.json({ success: false, message: "Internal Server Error" }, 500);
   }
 };
