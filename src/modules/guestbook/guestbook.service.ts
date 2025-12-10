@@ -1,7 +1,7 @@
 import { supabase } from "../../config/supabase";
 import { formatDate } from "../../utils/format-date";
 
-export const getMessages = async (page = 1, limit = 2) => {
+export const getMessages = async (page = 1, limit = 10) => {
   const from = (page - 1) * limit;
   const to = from + limit - 1;
 
