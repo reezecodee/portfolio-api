@@ -45,18 +45,17 @@ export const getAllProjects = async () => {
   return { data: sortedResult, error: null };
 };
 
-export const getProjects = async (page = 1, limit = 6, category = "") => {
+export const getProjects = async (page = 1, limit = 6, category = '') => {
   const from = (page - 1) * limit;
   const to = from + limit - 1;
 
   let query = supabase
-    .from("projects")
-    .select("*", { count: "exact" }) 
-    .eq("is_published", true)
-    .order("created_at", { ascending: false });
+    .from('projects')
+    .select('*', { count: 'exact' }) 
+    .order('created_at', { ascending: false });
 
-  if (category && category !== "All") {
-    query = query.eq("category", category);
+  if (category && category !== 'All') {
+    query = query.eq('category', category);
   }
 
   const { data, count, error } = await query.range(from, to);
@@ -65,7 +64,7 @@ export const getProjects = async (page = 1, limit = 6, category = "") => {
 
   return {
     data: data,
-    total: count,
+    total: count, 
     error: null,
   };
 };
