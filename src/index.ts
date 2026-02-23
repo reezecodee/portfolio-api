@@ -20,7 +20,7 @@ app.use(
   "*",
   cors({
     origin: (origin) => {
-      const allowed = ["https://reeze.up.railway.app", "http://localhost:5173"];
+      const allowed = ["https://azuvicenna.up.railway.app", "http://localhost:5173"];
 
       if (!origin || allowed.includes(origin)) {
         return origin;
