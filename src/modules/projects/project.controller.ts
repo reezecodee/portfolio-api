@@ -10,7 +10,7 @@ export const getList = async (c: Context) => {
     const { data, total, error } = await service.getProjects(
       page,
       limit,
-      category
+      category,
     );
 
     if (error) {
@@ -43,7 +43,7 @@ export const getDetail = async (c: Context) => {
           success: false,
           message: "Project tidak ditemukan",
         },
-        404
+        404,
       );
     }
 
@@ -54,4 +54,32 @@ export const getDetail = async (c: Context) => {
   } catch (e) {
     return c.json({ success: false, message: "Internal Server Error" }, 500);
   }
+};
+
+export const getAdminProjects = async (c: Context) => {
+  const { data, error } = await service.getAdminList();
+  if (error) return c.json({ success: false, message: error.message }, 400);
+  return c.json({ success: true, data });
+};
+
+export const create = async (c: Context) => {
+  const body = await c.req.json();
+  const { data, error } = await service.createProject(body);
+  if (error) return c.json({ success: false, message: error.message }, 400);
+  return c.json({ success: true, data }, 201);
+};
+
+export const update = async (c: Context) => {
+  const id = c.req.param("id");
+  const body = await c.req.json();
+  const { data, error } = await service.updateProject(id, body);
+  if (error) return c.json({ success: false, message: error.message }, 400);
+  return c.json({ success: true, data });
+};
+
+export const remove = async (c: Context) => {
+  const id = c.req.param("id");
+  const { error } = await service.deleteProject(id);
+  if (error) return c.json({ success: false, message: error.message }, 400);
+  return c.json({ success: true, message: "Project deleted" });
 };
